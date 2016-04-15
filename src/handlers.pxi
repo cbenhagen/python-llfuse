@@ -304,6 +304,10 @@ cdef void fuse_open (fuse_req_t req, fuse_ino_t ino, fuse_file_info *fi) with gi
         # http://article.gmane.org/gmane.comp.file-systems.fuse.devel/5325/
         fi.keep_cache = 1
 
+        # Hardcode direct_io until issue #72 gets resolved:
+        # https://bitbucket.org/nikratio/python-llfuse/issues/72/expose-direct-i-o-flag
+        fi.direct_io = 1
+
         ret = fuse_reply_open(req, fi)
     except FUSEError as e:
         ret = fuse_reply_err(req, e.errno)
