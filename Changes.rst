@@ -4,12 +4,31 @@
 
 .. currentmodule:: llfuse
 
-Unreleased Changes
-==================
-
-Python-LLFUSE is no longer actively maintained. Unless you are stuck
+**WARNING**: Python-LLFUSE is no longer actively maintained. Unless you are stuck
 with Python 2.x or libfuse 2.x, we recommended to use the pyfuse3_
 module instead.
+
+Release 1.3.8 (2020-10-10)
+==========================
+
+* fix compilation on FreeBSD, #28
+* export DEVELOPER_MODE=1 can be used to opt in (default is 0), #22
+* twine-based pypi-uploading, Qubes OS support for GPG signing,
+  see util/sdist-sign and pypi-upload
+
+Release 1.3.7 (2020-10-04)
+==========================
+
+* Rebuild with Cython 0.29.21 for Python 3.9 compatibility.
+
+Release 1.3.6 (2019-02-14)
+==========================
+
+* No change upload.
+
+* Python-LLFUSE is no longer actively maintained. Unless you are stuck
+  with Python 2.x or libfuse 2.x, we recommended to use the pyfuse3_
+  module instead.
 
 
 Release 1.3.5 (2018-08-30)

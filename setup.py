@@ -46,10 +46,11 @@ from distutils.version import LooseVersion
 basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'util'))
 
-# When running from HG repo, enable all warnings
-DEVELOPER_MODE = os.path.exists(os.path.join(basedir, 'MANIFEST.in'))
+# when running with DEVELOPER_MODE=1 in the environment:
+# enable all warnings, abort on some warnings.
+DEVELOPER_MODE = os.getenv('DEVELOPER_MODE', '0') == '1'
 if DEVELOPER_MODE:
-    print('found MANIFEST.in, running in developer mode')
+    print('running in developer mode')
     warnings.resetwarnings()
     # We can't use `error`, because e.g. Sphinx triggers a
     # DeprecationWarning.
@@ -59,7 +60,7 @@ if DEVELOPER_MODE:
 # to work properly
 sys.path.insert(0, os.path.join(basedir, 'src'))
 
-LLFUSE_VERSION = '1.3.5'
+LLFUSE_VERSION = '1.3.8'
 
 def main():
 
@@ -135,12 +136,18 @@ def main():
           long_description=long_desc,
           author='Nikolaus Rath',
           author_email='Nikolaus@rath.org',
-          url='https://bitbucket.org/nikratio/python-llfuse/',
-          download_url='https://bitbucket.org/nikratio/python-llfuse/downloads',
+          url='https://github.com/python-llfuse/python-llfuse/',
           license='LGPL',
           classifiers=['Development Status :: 4 - Beta',
                        'Intended Audience :: Developers',
                        'Programming Language :: Python',
+                       'Programming Language :: Python :: 3',
+                       'Programming Language :: Python :: 3.4',
+                       'Programming Language :: Python :: 3.5',
+                       'Programming Language :: Python :: 3.6',
+                       'Programming Language :: Python :: 3.7',
+                       'Programming Language :: Python :: 3.8',
+                       'Programming Language :: Python :: 3.9',
                        'Topic :: Software Development :: Libraries :: Python Modules',
                        'Topic :: System :: Filesystems',
                        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
@@ -232,8 +239,9 @@ class build_cython(setuptools.Command):
             raise SystemExit('Cython needs to be installed for this command')
 
         hit = re.match('^Cython version (.+)$', version)
-        if not hit or LooseVersion(hit.group(1)) < "0.24":
-            raise SystemExit('Need Cython 0.24 or newer, found ' + version)
+        if not hit or LooseVersion(hit.group(1)) < "0.29":
+            # in fact, we need a very recent Cython version (like 0.29.21) to support py39
+            raise SystemExit('Need Cython 0.29 or newer, found ' + version)
 
         cmd = ['cython', '-Wextra', '--force', '-3', '--fast-fail',
                '--directive', 'embedsignature=True', '--include-dir',
